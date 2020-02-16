@@ -15,7 +15,7 @@ $(document).ready(function () {
     const amenitiesN = Object.values(amenities);
     $('.amenities h4').text(amenitiesN.join(', '));
   });
-  
+
   $('.locations H2 input').click(function () {
     const dataIDState = $(this).attr('data-id');
     const dataNameState = $(this).attr('data-name');
@@ -56,12 +56,10 @@ $(document).ready(function () {
 
   $('button').click(function () {
     $('.places article').remove();
-    const amenitiesID = Object.keys(amenities);
-    amenitiesID.forEach(function (part, index) {
-      this[index] = '"' + this[index] + '"';
-    }, amenitiesID);
-    const strAmenitiesID = amenitiesID.join(', ');
-    const strData = '{"amenities": [' + strAmenitiesID + ']}';
+    const strAmenitiesID = getStrID(amenities);
+    const strStatesID = getStrID(states);
+    const strCitiesID = getStrID(cities);
+    const strData = '{"amenities": [' + strAmenitiesID + '], "states": [' + strStatesID + '], "cities": [' + strCitiesID + ']}';
 
     $.ajax({
       type: 'POST',
@@ -71,6 +69,14 @@ $(document).ready(function () {
     }).done(loadPlaces);
   });
 });
+
+function getStrID (object) {
+  const objectsID = Object.keys(object);
+  objectsID.forEach(function (part, index) {
+    this[index] = '"' + this[index] + '"';
+  }, objectsID);
+  return objectsID.join(', ');
+}
 
 function compare (a, b) {
   if (a.name < b.name) {
